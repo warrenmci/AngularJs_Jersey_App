@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+<head>
+<meta charset="ISO-8859-1">
+<title>Angular Application</title>
+<script type="text/javascript" src="js/angular.min.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+</head>
+<body ng-controller="staffController">
+
+<div style="width: 50%">
+<table class="table table-hover table-condensed">
+	<tr>
+		<!-- <th>ID</th> -->
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Position</th>
+	</tr>
+	<tr ng-repeat="person in allStaff | orderBy: 'lastname'">
+			<!-- 
+			<td style="vertical-align: middle;"">
+				<span ng-hide="editMode">{{person.id}}</span>
+				<input type="text" ng-show="editMode" ng-model="person.id" style="width: 50%"/>
+			</td>
+			-->
+			<td style="vertical-align: middle;">
+				<span ng-hide="editMode">{{person.firstname}}</span>
+				<input type="text" ng-show="editMode" ng-model="person.firstname" style="width: 75%"/>
+			</td>
+			<td style="vertical-align: middle;">
+				<span ng-hide="editMode">{{person.lastname}}</span>
+				<input type="text" ng-show="editMode" ng-model="person.lastname" style="width: 75%"/>
+			</td>
+			<td style="vertical-align: middle;">
+				<span ng-hide="editMode">{{person.position}}</span>
+				<input type="text" ng-show="editMode" ng-model="person.position" style="width: 75%"/>
+			</td>
+			
+		<td style="width: 25%">
+			<button class="btn btn-primary btn-sm" ng-hide="editMode" ng-click="editMode=true"><b>Edit</b></button>
+			<button class="btn btn-primary btn-sm" ng-show="editMode" ng-click="updateStaffMember(person); editMode=false"><b>Update</b></button>
+			<button class="btn btn-danger btn-sm" ng-hide="editMode" ng-click="deleteStaffMember(person)"><b>Delete</b></button>
+			<button class="btn btn-danger btn-sm" ng-show="editMode" ng-click="editMode=false"><b>Cancel</b></button>
+		</td>
+	</tr>
+</table>
+</div>
+<div style="width: 50%;" align="center" >
+
+<hr/>
+<h4>Add New Staff Member</h4>
+<form ng-submit="submitStaffMember()">
+<table class="table table-condensed">
+	<tr>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Position</th>
+	</tr>
+	<tr>
+		<td style="vertical-align: middle;"><input type="text" ng-model="formData.firstname" /></td>
+		<td style="vertical-align: middle;"><input type="text" ng-model="formData.lastname" /></td>
+		<td style="vertical-align: middle;"><input type="text" ng-model="formData.position" /></td>
+		<td style="vertical-align: middle;"><input class="btn btn-default" type="submit" value="Add Staff"/></td>
+	</tr>
+</table>
+</form>
+</div>
+
+<script type="text/javascript">
+	var myapp = angular.module('myapp', []);
+	
+	myapp.controller('staffController', function ($scope, $http){
+		
+		$scope.editMode = false;
+		
+		<!--add all the staff into the main array-->
+		$scope.allStaff = [];
+		
+		$scope.formData = {
+				id : -1,
+				firstname : "",
+				lastname : "",
+				position : ""
+		};
+		
+		refreshStaffArray();
+		
+		$scope.submitStaffMember = function(){
+			$http({
+                method : "POST",
+                url : "http://localhost:8080/SalonServer/rest/salon/add",
+                data : angular.toJson($scope.formData),
+                headers : {'Content-Type' : 'application/json'}
+            }).then(success, error);
+		};
+		
+		$scope.updateStaffMember = function(person){
+			$scope.formData.id = person.id;
+			$scope.formData.firstname = person.firstname;
+			$scope.formData.lastname = person.lastname;
+			$scope.formData.position = person.position;
+			
+			$http({
+                method : "PUT",
+                url : "http://localhost:8080/SalonServer/rest/salon/update",
+                data : angular.toJson($scope.formData),
+                headers : {'Content-Type' : 'application/json'}
+            }).then(success, error);
+		};
+		
+		$scope.deleteStaffMember = function(person){
+			$http({
+				method : 'DELETE',
+				url : 'http://localhost:8080/SalonServer/rest/salon/remove/' + person.id
+			}).then(success, error);
+		};
+		
+		function refreshStaffArray(){
+			$http({
+			      method: 'GET',
+			      url: 'http://localhost:8080/SalonServer/rest/salon/findall'
+			   }).then(function (response){
+				   $scope.allStaff = response.data;
+			   },function (response){
+				   console.log(response.statusText);
+			   });
+		};
+		
+		function success(response){
+			refreshStaffArray();
+			clearFormData();
+		};
+		
+		function error(response) {
+			console.log(response.statusText)
+		};
+		
+		
+		function clearFormData() {
+            $scope.formData.id = -1;
+            $scope.formData.firstname = "";
+            $scope.formData.lastname = "";
+        	$scope.formData.position = "";
+        };
+		
+		   <!-- end of controller -->
+		});
+</script>
+
+</body>
+</html>
