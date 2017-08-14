@@ -14,28 +14,12 @@ public class RESTfulService {
 	
 	PersonDao personDao = new PersonDao();
 	
-	//GET Methods
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/find")
 	public Person find() {
 		return personDao.find();
 	}
-	
-	
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Path("/json")
-//	public Person findJSON() {
-//		return personDao.find();
-//	}
-//	
-//	@GET
-//	@Produces(MediaType.APPLICATION_XML)
-//	@Path("/xml")
-//	public Person findXML() {
-//		return personDao.find();
-//	}
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -45,39 +29,11 @@ public class RESTfulService {
 	}
 	
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/jsonall")
-	public List<Person> findAllJSON() {
-		return personDao.findAll();
-	}
-//	
-//	@GET
-//	@Produces(MediaType.APPLICATION_XML)
-//	@Path("/xmlall")
-//	public List<Person> findAllXML() {
-//		return personDao.findAll();
-//	}
-	
-	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/{id}")
 	public Person findById(@PathParam("id") Integer id) {
 		return personDao.findById(id);
 	}
-	
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Path("/json/{id}")
-//	public Person findJSONById(@PathParam("id") Integer id) {
-//		return personDao.findById(id);
-//	}
-//	
-//	@GET
-//	@Produces(MediaType.APPLICATION_XML)
-//	@Path("/xml/{id}")
-//	public Person findXMLById(@PathParam("id") Integer id) {
-//		return personDao.findById(id);
-//	}
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -86,40 +42,12 @@ public class RESTfulService {
 		return personDao.findByFirstName(st);
 	}
 	
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Path("/jsonfirstname/{st}")
-//	public List<Person> findJSONByFirstName(@PathParam("st") String st) {
-//		return personDao.findByFirstName(st);
-//	}
-//	
-//	@GET
-//	@Produces(MediaType.APPLICATION_XML)
-//	@Path("/xmlfirstname/{st}")
-//	public List<Person> findXMLByFirstName(@PathParam("st") String st) {
-//		return personDao.findByFirstName(st);
-//	}
-	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/lastname/{st}")
 	public List<Person> findByLastName(@PathParam("st") String st) {
 		return personDao.findByLastName(st);
 	}
-	
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Path("/jsonlastname/{st}")
-//	public List<Person> findJSONByLastName(@PathParam("st") String st) {
-//		return personDao.findByLastName(st);
-//	}
-//	
-//	@GET
-//	@Produces(MediaType.APPLICATION_XML)
-//	@Path("/xmllastname/{st}")
-//	public List<Person> findXMLByLastName(@PathParam("st") String st) {
-//		return personDao.findByLastName(st);
-//	}
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -128,22 +56,6 @@ public class RESTfulService {
 		return personDao.findByPosition(st);
 	}
 	
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Path("/jsonpos/{st}")
-//	public List<Person> findJSONByPosition(@PathParam("st") String st) {
-//		return personDao.findByPosition(st);
-//	}
-//	
-//	@GET
-//	@Produces(MediaType.APPLICATION_XML)
-//	@Path("/xmlpos/{st}")
-//	public List<Person> findXMLByPosition(@PathParam("st") String st) {
-//		return personDao.findByPosition(st);
-//	}
-	
-	//Post Methods
-	
 	@POST
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -151,14 +63,6 @@ public class RESTfulService {
 	public Person addJSONStaff(Person person) {
 		return personDao.addStaff(person);
 	}
-	
-//	@POST
-//	@Consumes(MediaType.APPLICATION_XML)
-//	@Produces(MediaType.APPLICATION_XML)
-//	@Path("/xmladd")
-//	public Person addXMLStaff(Person person) {
-//		return personDao.addStaff(person);
-//	}
 	
 	@PUT
     @Path("/update")
